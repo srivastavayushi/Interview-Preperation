@@ -3,17 +3,16 @@
 #include <array>
 using namespace std;
 
+int secondLargest(int arr[], int n){
+
+}
+
 int main(){
-    int n, arr[n],max=0;
+    int n, arr[n];
     cin>>n;
     for(int i=0;i<n;i++){
         cin>>arr[i];
     }
-    for(int i=0;i<n;i++){
-        if(arr[i]>max){
-            max=arr[i];
-        }
-    }
-    cout<<max;
+    cout<< secondLargest(arr,n);
     return 0;
 }
