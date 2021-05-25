@@ -202,23 +202,173 @@ void removeCycle(Node* head){
     slow->next = NULL;
 
 } 
-        
-    
 
+int length(Node* head){
+    Node* temp = head;
+
+    int count =0;
+    while(temp != NULL){
+        temp=temp->next;
+        count++;
+    }
+    return count;
+}
+        
+// APPEND LAST K NODES
+
+Node* appendLastK(Node* &head, int pos){
+    Node* tail = head;
+    Node* newhead;
+    Node* newtail;
+
+    int count=1;
+    int l= length(head);
+
+    while(tail->next != NULL){
+        
+        if(count == (l-pos)){
+            newtail = tail;
+        }
+        if(count==(l-pos+1)){
+            newhead = tail;
+        }
+        count++;
+        tail = tail->next;
+    }
+
+    newtail->next = NULL;
+    tail->next = head;
+    return newhead;
+    
+}
+
+// INTERSECT 2 LINKED LISTS
+
+void intersect(Node* &head1,Node* &head2, int pos){
+      Node* temp1 = head1;
+    Node* temp2 = head2;
+    pos--;
+    while(pos--){
+        temp1 = temp1->next;
+    }
+    while(temp2->next!=NULL){
+        temp2=temp2->next;
+    }
+    temp2->next=temp1;
+
+}
+
+// GET INTERSECTION POINT OF 2 LINKED LISTS
+
+int intersection(Node* &head1, Node* &head2){
+    Node* ptr1;
+    Node* ptr2;
+
+    int l1 = length(head1);
+    int l2 = length(head2);
+
+    int d=0;
+
+    if(l1>l2){
+        ptr1 = head1;
+        ptr2=head2;
+        d=l1-l2;
+    }else{
+        ptr1=head2;
+        ptr2=head1;
+        d=l2-l1;
+    }
+
+    while(d){
+        ptr1 = ptr1->next;
+        if(ptr1==NULL){
+            return -1;
+        }
+        d--;
+    }
+
+    while(ptr1!=NULL && ptr2!= NULL){
+        if(ptr1->data == ptr2->data){
+            return ptr1->data;
+        }
+        ptr1 = ptr1->next;
+        ptr2=ptr2->next;
+    }
+    return -1;
+
+}
+
+// MERGE 2 LL
+
+Node* merge(Node* &head1, Node* &head2){
+    Node* dummyNode = new Node(-1);
+    Node* ptr1 = head1;
+    Node* ptr2 = head2;
+    Node* ptr3 = dummyNode;
+
+    while(ptr1!=NULL&&ptr2!=NULL){
+        
+        if(ptr1->data < ptr2->data){
+            ptr3->next=ptr1;
+            ptr1=ptr1->next;
+        }else{
+            ptr3->next=ptr2;
+            ptr2=ptr2->next;
+        }
+        ptr3=ptr3->next;
+    }
+
+    while(ptr1!=NULL){
+        ptr3->next=ptr1;
+        ptr1 = ptr1->next;
+        ptr3 = ptr3->next;
+    }
+      while(ptr2!=NULL){
+        ptr3->next=ptr2;
+        ptr2 = ptr2->next;
+        ptr3 = ptr3->next;
+    }
+
+    return dummyNode->next;
+
+}
+
+// second method
+
+Node* mergeRecursive(Node* &head1, Node* &head2){
+    Node* result;
+
+    if(head1==NULL){
+        return head2;
+    }
+    if(head2==NULL){
+        return head1;
+    }
+
+    if(head1->data < head2->data){
+        result = head1;
+        result->next = mergeRecursive(head1->next,head2);
+    }else{
+        result=head2;
+        result->next = mergeRecursive(head1,head2->next);
+    }
+    return result;
+}
 
 int main(){
 
-    Node* head = NULL;
-    insertAtEnd(1,head);
-    insertAtEnd(2,head);
-    insertAtEnd(3,head);
-    insertAtEnd(4,head);
-    insertAtEnd(5,head);
-    insertAtHead(0,head);
-    insertAtEnd(6,head);
-    insertAtEnd(7,head);
-    insertAtEnd(8,head);
-    display(head);
+    Node* head1 = NULL;
+    Node* head2 = NULL;
+    int arr1[]={1,3,5,8,9};
+    for(int i=0;i<5;i++){
+        insertAtEnd(arr1[i],head1);
+    }
+    int arr2[]={2,4,6,7,10,11,12,13};
+     for(int i=0;i<8;i++){
+        insertAtEnd(arr2[i],head2);
+     }
+     display(head1);
+     display(head2);
 //  search(head,4);
 //  search(head,8);
 //  deletion(head,3);
@@ -229,9 +379,18 @@ int main(){
  //  int k =3;   
  //  Node* newhead = reverseK(head,k);
  //  display(newhead);
-    makeCycle(head,3);
-    detectCycle(head);
+ //   makeCycle(head,3);
+//    detectCycle(head);
     // removeCycle(head);
     // detectCycle(head);
-    
+   // Node* newhead = appendLastK(head,3);
+   // display(newhead);
+
+  // intersect(head1,head2,4);
+  // display(head1);
+  // display(head2);
+   //cout<<intersection(head1,head2)<<endl;
+        Node* newhead = mergeRecursive(head1,head2);
+        display(newhead);
+
 }
